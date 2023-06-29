@@ -1,3 +1,5 @@
+import { App } from './app/app';
 import './global.css';
 
-console.log('ok');
+const app: App = new App();
+app.init();
