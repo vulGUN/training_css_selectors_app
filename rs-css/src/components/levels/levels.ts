@@ -128,7 +128,7 @@ export class Levels {
     });
   }
 
-  private changeLevel(button: HTMLElement): void {
+  public changeLevel(button: HTMLElement): void {
     if (button.classList.contains('levels__header-nav-next') && this.currentLevel < GAME_LEVELS.length - 1) {
       this.currentLevel += 1;
     } else if (button.classList.contains('levels__header-nav-prev') && this.currentLevel > 0) {

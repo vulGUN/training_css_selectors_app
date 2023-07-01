@@ -7,7 +7,9 @@ import { checkQuerySelector } from '../../utils/checkQuerySelector';
 export class Input {
   private readonly CODE_SCREEN: CodeScreen = new CodeScreen();
 
-  private readonly LEVELS: Levels = new Levels();
+  // private readonly LEVELS: Levels = new Levels();
+
+  private readonly LEVELS: Levels;
 
   private readonly INPUT_SELECTOR = 'input';
 
@@ -17,11 +19,19 @@ export class Input {
 
   // !поменять inputContainer на общий селектор / создать его
 
-  public inputContainer: HTMLElement = this.createInputContainer();
+  private inputContainer: HTMLElement = this.createInputContainer();
 
-  public inputField: HTMLElement = this.createInputFieldElement();
+  private inputField: HTMLInputElement = this.createInputFieldElement();
 
-  public inputBtn: HTMLElement = this.createInputBtnElement();
+  private inputBtn: HTMLElement = this.createInputBtnElement();
+
+  constructor(levels: Levels) {
+    this.LEVELS = levels;
+  }
+
+  public getInputField(): HTMLElement {
+    return this.inputField;
+  }
 
   private createInputContainer(): HTMLElement {
     const inputContainer: HTMLDivElement = document.createElement(this.DIV_SELECTOR);
@@ -30,7 +40,7 @@ export class Input {
     return inputContainer;
   }
 
-  private createInputFieldElement(): HTMLElement {
+  private createInputFieldElement(): HTMLInputElement {
     const input: HTMLInputElement = document.createElement(this.INPUT_SELECTOR);
     input.classList.add('input__field', 'flicker');
     input.type = 'text';
@@ -79,7 +89,7 @@ export class Input {
     return fragment;
   }
 
-  public getInputValue(): void {
+  public setInputValue(): void {
     this.inputField.addEventListener('input', (event: Event) => {
       // ?разобраться как работает <HTMLInputElement>event.target;
 
@@ -88,6 +98,10 @@ export class Input {
 
       this.removeInputAnimation(value);
     });
+  }
+
+  public getInputValue(): string {
+    return this.inputValue;
   }
 
   private removeInputAnimation(value = ''): void {
@@ -111,20 +125,28 @@ export class Input {
 
       const target = event.target as HTMLElement;
 
-      if (!target) throw Error('some error');
-
       if (target.className.includes('input__btn')) {
         this.inputBtn.classList.add('press-down');
         this.inputBtn.addEventListener('animationend', () => {
           this.inputBtn.classList.remove('press-down');
         });
         this.checkAnswer(this.inputValue);
-
-        console.log(this.LEVELS.getCurrentLevel());
-
-        // console.log(this.inputValue);
       }
     });
+  }
+
+  private checkAnswer(value: string): void {
+    if (value === GAME_LEVELS[this.LEVELS.getCurrentLevel()].answer) {
+      const levelItem = checkQuerySelector('.levels__list');
+      const checkmark = levelItem.children[this.LEVELS.getCurrentLevel()].children[0];
+      const nextBtn = checkQuerySelector('.levels__header-nav-next');
+      checkmark.classList.add('completed');
+      this.LEVELS.changeLevel(nextBtn);
+      this.inputField.value = '';
+      this.removeInputAnimation(this.inputField.value);
+    } else {
+      this.addJiggleAnimation(this.inputContainer);
+    }
   }
 
   private addJiggleAnimation(element: HTMLElement): void {
@@ -141,26 +163,4 @@ export class Input {
       document.querySelector('.code-screen')?.classList.remove('jiggle');
     });
   }
-
-  private checkAnswer(value: string): void {
-    if (value === GAME_LEVELS[this.LEVELS.getCurrentLevel()].answer) {
-      const levelItem = checkQuerySelector('.levels__list');
-      const checkmark = levelItem.children[this.LEVELS.getCurrentLevel()].children[0];
-      checkmark.classList.add('completed');
-    } else {
-      this.addJiggleAnimation(this.inputContainer);
-    }
-  }
-
-  // public isInputFocus(): boolean {
-  //   let focus = false;
-
-  //   this.inputField.addEventListener('focus', (event: FocusEvent) => {
-  //     if (document.activeElement === event.target) {
-  //       focus = true;
-  //     }
-  //   });
-
-  //   return focus;
-  // }
 }

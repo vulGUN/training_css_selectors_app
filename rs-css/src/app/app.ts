@@ -8,7 +8,7 @@ export class App {
 
   private readonly levels: Levels = new Levels();
 
-  private readonly input: Input = new Input();
+  private readonly input: Input = new Input(this.levels);
 
   private readonly codeScreen: CodeScreen = new CodeScreen();
 
@@ -17,10 +17,10 @@ export class App {
 
     container?.appendChild(this.layoutScreen.createCodeScreenLayout());
     container?.appendChild(this.levels.createLevelsLayout());
-    container?.appendChild(this.input.createInputLayout());
     container?.appendChild(this.codeScreen.createCodeScreenLayout());
+    container?.appendChild(this.input.createInputLayout());
 
-    this.input.getInputValue();
+    this.input.setInputValue();
     this.input.pressInputBtn();
 
     this.levels.pressPrevAndNextBtn();
