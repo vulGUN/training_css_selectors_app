@@ -1,9 +1,19 @@
 import './input.css';
+import { CodeScreen } from '../code-screen/codeScreen';
+import { GAME_LEVELS } from '../levels/gameLevels';
+import { Levels } from '../levels/levels';
+import { checkQuerySelector } from '../../utils/checkQuerySelector';
 
 export class Input {
+  private readonly CODE_SCREEN: CodeScreen = new CodeScreen();
+
+  private readonly LEVELS: Levels = new Levels();
+
   private readonly INPUT_SELECTOR = 'input';
 
   private readonly DIV_SELECTOR = 'div';
+
+  private inputValue = '';
 
   // !поменять inputContainer на общий селектор / создать его
 
@@ -40,9 +50,6 @@ export class Input {
   public createInputLayout(): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
 
-    const inputContainer: HTMLDivElement = document.createElement('div');
-    inputContainer.classList.add('input');
-
     const inputHeader: HTMLDivElement = document.createElement('div');
     inputHeader.classList.add('input__header');
 
@@ -65,23 +72,21 @@ export class Input {
 
     inputWrapper.append(this.inputField, this.inputBtn);
     inputHeader.append(inputHeaderLeftTitle, inputHeaderRightTitle);
-    inputContainer.append(inputHeader, inputWrapper, inputText);
+    this.inputContainer.append(inputHeader, inputWrapper, inputText);
 
-    fragment.appendChild(inputContainer);
+    fragment.appendChild(this.inputContainer);
 
     return fragment;
   }
 
-  public checkInputValue(): void {
+  public getInputValue(): void {
     this.inputField.addEventListener('input', (event: Event) => {
       // ?разобраться как работает <HTMLInputElement>event.target;
 
-      const { value } = <HTMLInputElement>event.target ?? '';
-
-      console.log(value);
+      const { value } = <HTMLInputElement>event.target;
+      this.inputValue = value;
 
       this.removeInputAnimation(value);
-      this.pressInputBtn(this.inputContainer, value);
     });
   }
 
@@ -90,14 +95,14 @@ export class Input {
     else this.inputField.classList.add('flicker');
   }
 
-  public pressInputBtn(element: HTMLElement, value: string): void {
+  public pressInputBtn(): void {
     document.addEventListener('keydown', (event: KeyboardEvent) => {
       if (event.code === 'Enter') {
         this.inputBtn.classList.add('press-down');
         this.inputBtn.addEventListener('animationend', () => {
           this.inputBtn.classList.remove('press-down');
         });
-        this.checkAnswer(value, element);
+        this.checkAnswer(this.inputValue);
       }
     });
 
@@ -113,24 +118,37 @@ export class Input {
         this.inputBtn.addEventListener('animationend', () => {
           this.inputBtn.classList.remove('press-down');
         });
-        this.checkAnswer(value, element);
+        this.checkAnswer(this.inputValue);
+
+        console.log(this.LEVELS.getCurrentLevel());
+
+        // console.log(this.inputValue);
       }
     });
   }
 
   private addJiggleAnimation(element: HTMLElement): void {
+    const codeScreenContainer = this.CODE_SCREEN.getcodeScreenContainer();
+
     element.classList.add('jiggle');
+    codeScreenContainer.classList.add('jiggle');
+    document.querySelector('.code-screen')?.classList.add('jiggle');
+
+    // !не применяются стили к codeScreenContainer, в консоли все ок.
+
     element.addEventListener('animationend', () => {
       element.classList.remove('jiggle');
+      document.querySelector('.code-screen')?.classList.remove('jiggle');
     });
-
-    console.log(this);
   }
 
-  private checkAnswer(value: string, element: HTMLElement): void {
-    if (value === '') {
-      this.addJiggleAnimation(element);
-      console.log('value~~', value);
+  private checkAnswer(value: string): void {
+    if (value === GAME_LEVELS[this.LEVELS.getCurrentLevel()].answer) {
+      const levelItem = checkQuerySelector('.levels__list');
+      const checkmark = levelItem.children[this.LEVELS.getCurrentLevel()].children[0];
+      checkmark.classList.add('completed');
+    } else {
+      this.addJiggleAnimation(this.inputContainer);
     }
   }
 

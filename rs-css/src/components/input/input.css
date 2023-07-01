@@ -11,7 +11,8 @@
   border: 1px solid #8ea382;
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
-  margin: 10px 0 10px 10px;
+  border-right: none;
+  margin: 20px 0 20px 20px;
 }
 
 .input__header {
@@ -94,7 +95,7 @@
 }
 
 .jiggle {
-  animation: jiggle 0.1s 6;
+  animation: jiggle 0.1s 3 forwards;
 }
 
 @keyframes jiggle {
