@@ -16,10 +16,13 @@ export class App {
     const container = document.querySelector('#container');
 
     container?.appendChild(this.layoutScreen.createCodeScreenLayout());
-    container?.appendChild(this.levels.start());
+    container?.appendChild(this.levels.createLevelsLayout());
     container?.appendChild(this.input.createInputLayout());
-    container?.appendChild(this.codeScreen.start());
+    container?.appendChild(this.codeScreen.createCodeScreenLayout());
 
-    this.input.checkInputValue();
+    this.input.getInputValue();
+    this.input.pressInputBtn();
+
+    this.levels.pressPrevAndNextBtn();
   }
 }
