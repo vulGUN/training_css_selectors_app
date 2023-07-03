@@ -4,10 +4,22 @@ import { GAME_LEVELS } from '../levels/gameLevels';
 import { Levels } from '../levels/levels';
 import { checkQuerySelector } from '../../utils/checkQuerySelector';
 
+// interface Iinput {
+//   CODE_SCREEN: CodeScreen,
+//   COMPLETE_SELECTOR: string,
+//   LEVELS: Levels,
+//   INPUT_SELECTOR: string,
+//   DIV_SELECTOR: string,
+//   inputValue: string,
+//   inputContainer: HTMLElement,
+//   inputField: HTMLElement,
+//   inputBtn: HTMLElement,
+// }
+
 export class Input {
   private readonly CODE_SCREEN: CodeScreen = new CodeScreen();
 
-  // private readonly LEVELS: Levels = new Levels();
+  private readonly COMPLETE_SELECTOR = '.completed';
 
   private readonly LEVELS: Levels;
 
@@ -69,13 +81,9 @@ export class Input {
     const inputHeaderRightTitle: HTMLSpanElement = document.createElement('span');
     inputHeaderRightTitle.innerText = 'style.css';
 
-    const inputText: HTMLElement = document.createElement('pre');
+    const inputText: HTMLElement = document.createElement('div');
     inputText.classList.add('input__help-text');
-    inputText.innerText = `
-      {
-        /* Styles would go here. */
-      }
-    `;
+    inputText.innerText = '/* Styles would go here. */';
 
     const inputWrapper: HTMLDivElement = document.createElement('div');
     inputWrapper.classList.add('input__wrapper');
@@ -144,8 +152,17 @@ export class Input {
       this.LEVELS.changeLevel(nextBtn);
       this.inputField.value = '';
       this.removeInputAnimation(this.inputField.value);
+      this.checkWin();
     } else {
       this.addJiggleAnimation(this.inputContainer);
+    }
+  }
+
+  private checkWin(): void {
+    const completedLevel: NodeListOf<Element> = document.querySelectorAll(this.COMPLETE_SELECTOR);
+    const title: HTMLElement = checkQuerySelector('.layout-screen__title');
+    if (completedLevel.length === GAME_LEVELS.length) {
+      title.innerText = "🎉Congratulations, you've won!🎉";
     }
   }
 
