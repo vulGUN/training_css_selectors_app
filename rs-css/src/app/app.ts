@@ -24,5 +24,6 @@ export class App {
     this.input.pressInputBtn();
 
     this.levels.pressPrevAndNextBtn();
+    this.codeScreen.hoverEffectForCodeElements();
   }
 }
