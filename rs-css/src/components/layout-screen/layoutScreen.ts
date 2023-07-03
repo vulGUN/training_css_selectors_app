@@ -12,8 +12,6 @@ export class LayoutScreen {
 
   private readonly layoutScreenSelector = 'layout-screen';
 
-  private readonly GAME_LEVELS_ARR = GAME_LEVELS;
-
   public createCodeScreenLayout(): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
 
@@ -22,7 +20,7 @@ export class LayoutScreen {
 
     const layoutScreenTitle = document.createElement('h2');
     layoutScreenTitle.classList.add('layout-screen__title');
-    layoutScreenTitle.textContent = this.GAME_LEVELS_ARR[this.LEVELS.getCurrentLevel()].title;
+    layoutScreenTitle.textContent = GAME_LEVELS[this.LEVELS.getCurrentLevel()].title;
 
     const imageWrap = this.createImage();
 
