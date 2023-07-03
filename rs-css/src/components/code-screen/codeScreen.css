@@ -30,6 +30,10 @@
   user-select: none;
 }
 
-.code-screen__body-text > div:not(:first-child):not(:last-child):hover {
-  color: #e0b34a;
+.code-screen__body-text div {
+  padding-left: 1em;
+}
+
+.highlight {
+  color: #e6af43;
 }

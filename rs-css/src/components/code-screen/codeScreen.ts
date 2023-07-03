@@ -1,8 +1,11 @@
 import './codeScreen.css';
-import { GAME_LEVELS } from '../levels/gameLevels';
+import { GAME_LEVELS, GameLevelType, CodeFragment } from '../levels/gameLevels';
+import { checkQuerySelector } from '../../utils/checkQuerySelector';
 
 export class CodeScreen {
   private readonly DIV_SELECTOR = 'div';
+
+  private readonly HIGHLIGHT_SELECTOR = 'highlight';
 
   private readonly CODE_SCREEN_SELECTOR: string = 'code-screen';
 
@@ -18,10 +21,10 @@ export class CodeScreen {
   }
 
   private createCodeScreenBodyText(): HTMLElement {
-    const CodeScreenBodyText: HTMLDivElement = document.createElement(this.DIV_SELECTOR);
-    CodeScreenBodyText.classList.add('code-screen__body-text');
+    const codeScreenBodyText: HTMLDivElement = document.createElement(this.DIV_SELECTOR);
+    codeScreenBodyText.classList.add('code-screen__body-text');
 
-    return CodeScreenBodyText;
+    return codeScreenBodyText;
   }
 
   public getcodeScreenContainer(): HTMLElement {
@@ -55,16 +58,50 @@ export class CodeScreen {
   }
 
   public generateCodeScreenBodyText(index = 0): DocumentFragment {
-    const CodeScreenBodyTextFragment: DocumentFragment = document.createDocumentFragment();
+    const level: GameLevelType = GAME_LEVELS[index];
+    const codeFragment = document.createDocumentFragment();
 
-    GAME_LEVELS[index].code.forEach((item) => {
-      const element = document.createElement(this.DIV_SELECTOR);
-      element.textContent = item.codeText;
-      CodeScreenBodyTextFragment.appendChild(element);
-    });
+    function generateCodeRecursively(
+      codeElements: CodeFragment[],
+      parentElement: HTMLElement | DocumentFragment,
+    ): void {
+      codeElements.forEach((item) => {
+        const element = document.createElement('div');
+        element.textContent = item.startTag;
+        parentElement.appendChild(element);
 
-    return CodeScreenBodyTextFragment;
+        if (item.children && item.children.length > 0) {
+          generateCodeRecursively(item.children, element);
+        }
+
+        element.insertAdjacentText('beforeend', item.endTag);
+      });
+    }
+
+    generateCodeRecursively(level.code, codeFragment);
+    return codeFragment;
+    console.log(this);
   }
 
-  // public changeLevel(): void {}
+  public hoverEffectForCodeElements(): void {
+    const codeList = checkQuerySelector('.code-screen__body-text');
+
+    codeList.addEventListener('mouseover', (event: MouseEvent) => {
+      const { target } = event;
+
+      if (!target) throw new Error('Target element not found.');
+
+      if (target && (target as HTMLElement).firstChild?.textContent !== '<div class="table">') {
+        (target as HTMLElement).classList.add(this.HIGHLIGHT_SELECTOR);
+      }
+    });
+
+    codeList.addEventListener('mouseout', (event: MouseEvent) => {
+      const { target } = event;
+
+      if (!target) throw new Error('Target element not found.');
+
+      (target as HTMLElement).classList.remove(this.HIGHLIGHT_SELECTOR);
+    });
+  }
 }
