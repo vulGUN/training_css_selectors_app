@@ -10,11 +10,23 @@ export class Levels {
 
   private readonly CODE_SCREEN: CodeScreen = new CodeScreen();
 
-  private prevBtn: HTMLElement = this.createLevelsPrevBtn();
+  private readonly prevBtn: HTMLElement = this.createLevelsPrevBtn();
 
-  private nextBtn: HTMLElement = this.createLevelsNextBtn();
+  private readonly nextBtn: HTMLElement = this.createLevelsNextBtn();
+
+  private readonly LEVELS_LIST: HTMLElement = this.createLevelList();
+
+  public readonly LEVELS_RESET: HTMLElement = this.createLevelsResetBtn();
 
   private currentLevel = 0;
+
+  private createLevelsResetBtn(): HTMLElement {
+    const levelResetBtn = document.createElement(this.DIV_SELECTOR);
+    levelResetBtn.classList.add('levels__reset-btn');
+    levelResetBtn.innerText = 'Reset progress';
+
+    return levelResetBtn;
+  }
 
   private createLevelsPrevBtn(): HTMLElement {
     const levelNavigationPrev = document.createElement(this.DIV_SELECTOR);
@@ -32,6 +44,13 @@ export class Levels {
 
   public getCurrentLevel(): number {
     return this.currentLevel;
+  }
+
+  private createLevelList(): HTMLElement {
+    const levelsList = document.createElement(this.DIV_SELECTOR);
+    levelsList.classList.add('levels__list');
+
+    return levelsList;
   }
 
   public createLevelsLayout(): DocumentFragment {
@@ -56,9 +75,6 @@ export class Levels {
     const levelNavigation = document.createElement('div');
     levelNavigation.classList.add('levels__header-nav');
 
-    const levelList = document.createElement('div');
-    levelList.classList.add('levels__list');
-
     const levelListItems = this.generateLevelsList();
 
     const levelListItemTitle = document.createElement('div');
@@ -70,9 +86,9 @@ export class Levels {
 
     levelsHeader.append(levelHeaderLeftSide, levelHeaderRightSide);
 
-    levelList.appendChild(levelListItems);
+    this.LEVELS_LIST.appendChild(levelListItems);
 
-    levelsContainer.append(levelsHeader, levelList);
+    levelsContainer.append(levelsHeader, this.LEVELS_LIST, this.LEVELS_RESET);
 
     fragment.appendChild(levelsContainer);
 
@@ -135,10 +151,10 @@ export class Levels {
       this.currentLevel -= 1;
     }
 
-    this.correctAnswer();
+    this.nextLevel();
   }
 
-  public correctAnswer(): void {
+  private nextLevel(): void {
     const codeScreenBodyText: HTMLElement = checkQuerySelector('.code-screen__body-text');
     const levelNumberText: HTMLElement = checkQuerySelector('.levels__header-text');
     const title: HTMLElement = checkQuerySelector('.layout-screen__title');
