@@ -154,10 +154,10 @@ export class Levels {
       this.currentLevel -= 1;
     }
 
-    this.nextLevel();
+    this.nextOrPrevLevel();
   }
 
-  private nextLevel(): void {
+  private nextOrPrevLevel(): void {
     const codeScreenBodyText: HTMLElement = checkQuerySelector('.code-screen__body-text');
     const layoutImageWrapper: HTMLElement = checkQuerySelector('.layout-screen__image-wrap');
     const levelNumberText: HTMLElement = checkQuerySelector('.levels__header-text');
@@ -175,5 +175,7 @@ export class Levels {
 
     layoutImageWrapper.appendChild(newImage);
     codeScreenBodyText.appendChild(newCodeScreenBodyText);
+
+    this.layoutScreen.addImageAnimation(this.currentLevel);
   }
 }
