@@ -26,6 +26,7 @@ export class App {
     this.levels.pressPrevAndNextBtn();
     this.codeScreen.hoverEffectForCodeElements();
 
+    this.levels.chooseLevel();
     this.layoutScreen.addImageAnimation();
   }
 }

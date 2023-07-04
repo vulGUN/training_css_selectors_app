@@ -137,6 +137,26 @@ export class Levels {
     });
   }
 
+  public chooseLevel(): void {
+    this.LEVELS_LIST.addEventListener('click', (event: MouseEvent) => {
+      const { target } = event;
+      if (!target) throw Error('');
+
+      if (target instanceof HTMLElement) {
+        const clickedItem = target.closest('.levels__list-item');
+        if (clickedItem) {
+          const itemList = Array.from(this.LEVELS_LIST.querySelectorAll('.levels__list-item'));
+          const itemIndex = itemList.indexOf(clickedItem);
+
+          if (this.currentLevel !== itemIndex) {
+            this.currentLevel = itemIndex;
+            this.nextOrPrevLevel();
+          }
+        }
+      }
+    });
+  }
+
   private changeCurrentClass(): void {
     const levelListItems: NodeListOf<Element> = document.querySelectorAll('.levels__list-item');
 
