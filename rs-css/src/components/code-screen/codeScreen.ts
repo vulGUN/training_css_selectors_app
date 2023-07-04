@@ -91,7 +91,7 @@ export class CodeScreen {
 
       if (!target) throw new Error('Target element not found.');
 
-      if (target && (target as HTMLElement).firstChild?.textContent !== '<div class="table">') {
+      if (target && (target as HTMLElement).firstChild?.textContent !== '<div class="container">') {
         (target as HTMLElement).classList.add(this.HIGHLIGHT_SELECTOR);
       }
     });
