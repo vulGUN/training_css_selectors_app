@@ -1,7 +1,6 @@
 import './layoutScreen.css';
 import { GAME_LEVELS, CodeFragment } from '../levels/gameLevels';
 import { CodeScreen } from '../code-screen/codeScreen';
-import { checkQuerySelector } from '../../utils/checkQuerySelector';
 
 export class LayoutScreen {
   private readonly CODE_SCREEN: CodeScreen = new CodeScreen();
