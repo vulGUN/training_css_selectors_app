@@ -76,17 +76,23 @@ rectangle.small {
 }
 
 .scale {
-  animation: scale 2s infinite;
+  animation: scale 3s infinite;
 }
 
 @keyframes scale {
   0% {
-    transform: scaleX(1);
+    transform: scaleX(1) skew(0) rotate(45deg);
+  }
+  25% {
+    transform: scaleX(0.8) skew(-5deg) rotate(0);
   }
   50% {
-    transform: scaleX(0.8);
+    transform: scaleX(1) skew(0) rotate(-45deg);
+  }
+  75% {
+    transform: scaleX(0.8) skew(5deg) rotate(0);
   }
   100% {
-    transform: scaleX(1);
+    transform: scaleX(1) skew(0) rotate(45deg);
   }
 }

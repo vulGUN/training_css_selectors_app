@@ -1,6 +1,7 @@
 import './layoutScreen.css';
 import { GAME_LEVELS, CodeFragment } from '../levels/gameLevels';
 import { CodeScreen } from '../code-screen/codeScreen';
+import { checkQuerySelector } from '../../utils/checkQuerySelector';
 
 export class LayoutScreen {
   private readonly CODE_SCREEN: CodeScreen = new CodeScreen();
@@ -78,5 +79,54 @@ export class LayoutScreen {
 
     generateCodeRecursively(level.children, codeFragment);
     return codeFragment;
+  }
+
+  public addImageAnimation(index = 0): void {
+    const circles = document.querySelectorAll('circle');
+    const fancy = document.querySelector('#fancy');
+    const smallRhombs = document.querySelectorAll('.small');
+    const smallRectangles = document.querySelectorAll('rectangle.small');
+    const all = document.querySelectorAll('.layout-screen__image-wrap *');
+    const everyRhomb = document.querySelectorAll('circle + rhomb.small, circle + rhomb');
+    const nthChild = document.querySelector('circle:nth-of-type(3)');
+    const even = document.querySelectorAll('circle:nth-of-type(even)');
+    const squareEmpty = document.querySelectorAll('square:empty');
+    const bigRhombs = document.querySelectorAll('rhomb:not(.small)');
+
+    switch (index) {
+      case 0:
+        circles.forEach((item) => item.classList.add('scale'));
+        break;
+      case 1:
+        fancy?.classList.add('scale');
+        break;
+      case 2:
+        smallRhombs.forEach((item) => item.classList.add('scale'));
+        break;
+      case 3:
+        smallRectangles.forEach((item) => item.classList.add('scale'));
+        break;
+      case 4:
+        all.forEach((item) => item.classList.add('scale'));
+        break;
+      case 5:
+        everyRhomb.forEach((item) => item.classList.add('scale'));
+        break;
+      case 6:
+        nthChild?.classList.add('scale');
+        break;
+      case 7:
+        even.forEach((item) => item.classList.add('scale'));
+        break;
+      case 8:
+        squareEmpty.forEach((item) => item.classList.add('scale'));
+        break;
+      case 9:
+        bigRhombs.forEach((item) => item.classList.add('scale'));
+        break;
+      default:
+        console.log('Nothing');
+        console.log(this);
+    }
   }
 }
