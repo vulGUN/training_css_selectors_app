@@ -2,6 +2,7 @@ import './levels.css';
 import { CodeScreen } from '../code-screen/codeScreen';
 import { GAME_LEVELS } from './gameLevels';
 import { checkQuerySelector } from '../../utils/checkQuerySelector';
+import { LayoutScreen } from '../layout-screen/layoutScreen';
 
 export class Levels {
   private readonly DIV_SELECTOR: string = 'div';
@@ -9,6 +10,8 @@ export class Levels {
   private readonly LEVELS_SELECTOR: string = 'levels';
 
   private readonly CODE_SCREEN: CodeScreen = new CodeScreen();
+
+  private readonly layoutScreen: LayoutScreen = new LayoutScreen();
 
   private readonly prevBtn: HTMLElement = this.createLevelsPrevBtn();
 
@@ -156,16 +159,21 @@ export class Levels {
 
   private nextLevel(): void {
     const codeScreenBodyText: HTMLElement = checkQuerySelector('.code-screen__body-text');
+    const layoutImageWrapper: HTMLElement = checkQuerySelector('.layout-screen__image-wrap');
     const levelNumberText: HTMLElement = checkQuerySelector('.levels__header-text');
     const title: HTMLElement = checkQuerySelector('.layout-screen__title');
 
     this.changeCurrentClass();
 
     codeScreenBodyText.innerHTML = '';
+    layoutImageWrapper.innerHTML = '';
     levelNumberText.innerText = `Level ${this.currentLevel + 1} of ${GAME_LEVELS.length}`;
     title.innerText = GAME_LEVELS[this.currentLevel].title;
 
     const newCodeScreenBodyText = this.CODE_SCREEN.generateCodeScreenBodyText(this.currentLevel);
+    const newImage = this.layoutScreen.generateImageElement(this.currentLevel);
+
+    layoutImageWrapper.appendChild(newImage);
     codeScreenBodyText.appendChild(newCodeScreenBodyText);
   }
 }
