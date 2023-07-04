@@ -25,5 +25,7 @@ export class App {
 
     this.levels.pressPrevAndNextBtn();
     this.codeScreen.hoverEffectForCodeElements();
+
+    this.layoutScreen.addImageAnimation();
   }
 }
