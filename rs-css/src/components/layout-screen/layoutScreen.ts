@@ -11,6 +11,10 @@ export class LayoutScreen {
 
   private imageWrapper = this.createImageWrapper();
 
+  public resetLayoutScreen(): void {
+    this.imageWrapper = this.createImageWrapper();
+  }
+
   private createImageWrapper(): HTMLElement {
     const imageWrap: HTMLDivElement = document.createElement(this.DIV_SELECTOR);
     imageWrap.classList.add('layout-screen__image-wrap');

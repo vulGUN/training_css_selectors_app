@@ -9,9 +9,14 @@ export class CodeScreen {
 
   private readonly CODE_SCREEN_SELECTOR: string = 'code-screen';
 
-  private readonly CODE_SCREEN_CONTAINER: HTMLElement = this.createCodeScreenContainer();
+  private CODE_SCREEN_CONTAINER: HTMLElement = this.createCodeScreenContainer();
 
-  private readonly CODE_SCREEN_BODY_TEXT: HTMLElement = this.createCodeScreenBodyText();
+  private CODE_SCREEN_BODY_TEXT: HTMLElement = this.createCodeScreenBodyText();
+
+  public resetCodeScreen(): void {
+    this.CODE_SCREEN_CONTAINER = this.createCodeScreenContainer();
+    this.CODE_SCREEN_BODY_TEXT = this.createCodeScreenBodyText();
+  }
 
   private createCodeScreenContainer(): HTMLElement {
     const codeScreenContainer = document.createElement(this.DIV_SELECTOR);

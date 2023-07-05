@@ -13,15 +13,22 @@ export class Levels {
 
   private readonly layoutScreen: LayoutScreen = new LayoutScreen();
 
-  private readonly prevBtn: HTMLElement = this.createLevelsPrevBtn();
+  private prevBtn: HTMLElement = this.createLevelsPrevBtn();
 
-  private readonly nextBtn: HTMLElement = this.createLevelsNextBtn();
+  private nextBtn: HTMLElement = this.createLevelsNextBtn();
 
-  private readonly LEVELS_LIST: HTMLElement = this.createLevelList();
+  private LEVELS_LIST: HTMLElement = this.createLevelList();
 
-  public readonly LEVELS_RESET: HTMLElement = this.createLevelsResetBtn();
+  public LEVELS_RESET: HTMLElement = this.createLevelsResetBtn();
 
   private currentLevel = 0;
+
+  public resetLevels(): void {
+    this.currentLevel = 0;
+    this.LEVELS_LIST = this.createLevelList();
+    this.prevBtn = this.createLevelsPrevBtn();
+    this.nextBtn = this.createLevelsNextBtn();
+  }
 
   private createLevelsResetBtn(): HTMLElement {
     const levelResetBtn = document.createElement(this.DIV_SELECTOR);

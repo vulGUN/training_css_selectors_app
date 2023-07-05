@@ -4,20 +4,8 @@ import { GAME_LEVELS } from '../levels/gameLevels';
 import { Levels } from '../levels/levels';
 import { checkQuerySelector } from '../../utils/checkQuerySelector';
 
-// interface Iinput {
-//   CODE_SCREEN: CodeScreen,
-//   COMPLETE_SELECTOR: string,
-//   LEVELS: Levels,
-//   INPUT_SELECTOR: string,
-//   DIV_SELECTOR: string,
-//   inputValue: string,
-//   inputContainer: HTMLElement,
-//   inputField: HTMLElement,
-//   inputBtn: HTMLElement,
-// }
-
 export class Input {
-  private readonly CODE_SCREEN: CodeScreen = new CodeScreen();
+  private CODE_SCREEN: CodeScreen = new CodeScreen();
 
   private readonly COMPLETE_SELECTOR = '.completed';
 
@@ -39,6 +27,44 @@ export class Input {
 
   constructor(levels: Levels) {
     this.LEVELS = levels;
+  }
+
+  private readonly handleKeyPress = (event: KeyboardEvent): void => {
+    if (event.code === 'Enter') {
+      this.addAnimationPressBtn(this.inputBtn);
+      this.checkAnswer(this.inputValue);
+    }
+  };
+
+  public addAnimationPressBtn(element: HTMLElement): void {
+    const animationEndHandler = (): void => {
+      element.classList.remove('press-down');
+      element.removeEventListener('animationend', animationEndHandler);
+    };
+
+    element.classList.add('press-down');
+    element.addEventListener('animationend', animationEndHandler);
+  }
+
+  private readonly handleClick = (event: Event): void => {
+    const { target } = event;
+
+    if (target instanceof HTMLElement) {
+      if (target.className.includes('input__btn')) {
+        this.checkAnswer(this.inputValue);
+        this.inputBtn.classList.add('press-down');
+        this.inputBtn.addEventListener('animationend', () => {
+          this.inputBtn.classList.remove('press-down');
+        });
+      }
+    }
+  };
+
+  public resetInput(): void {
+    this.inputContainer = this.createInputContainer();
+    this.inputField = this.createInputFieldElement();
+    this.inputBtn = this.createInputBtnElement();
+    this.removeInputBtnListeners();
   }
 
   public getInputField(): HTMLElement {
@@ -118,29 +144,13 @@ export class Input {
   }
 
   public pressInputBtn(): void {
-    document.addEventListener('keydown', (event: KeyboardEvent) => {
-      if (event.code === 'Enter') {
-        this.inputBtn.classList.add('press-down');
-        this.inputBtn.addEventListener('animationend', () => {
-          this.inputBtn.classList.remove('press-down');
-        });
-        this.checkAnswer(this.inputValue);
-      }
-    });
+    document.addEventListener('keydown', this.handleKeyPress);
+    this.inputBtn.addEventListener('click', this.handleClick);
+  }
 
-    this.inputBtn.addEventListener('click', (event: Event) => {
-      // !исправить строку: const target = event.target as HTMLElement;
-
-      const target = event.target as HTMLElement;
-
-      if (target.className.includes('input__btn')) {
-        this.inputBtn.classList.add('press-down');
-        this.inputBtn.addEventListener('animationend', () => {
-          this.inputBtn.classList.remove('press-down');
-        });
-        this.checkAnswer(this.inputValue);
-      }
-    });
+  private removeInputBtnListeners(): void {
+    document.removeEventListener('keydown', this.handleKeyPress);
+    this.inputBtn.removeEventListener('click', this.handleClick);
   }
 
   private checkAnswer(value: string): void {

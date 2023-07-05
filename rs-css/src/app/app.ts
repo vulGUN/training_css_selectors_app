@@ -2,6 +2,7 @@ import { LayoutScreen } from '../components/layout-screen/layoutScreen';
 import { Levels } from '../components/levels/levels';
 import { Input } from '../components/input/input';
 import { CodeScreen } from '../components/code-screen/codeScreen';
+import { checkQuerySelector } from '../utils/checkQuerySelector';
 
 export class App {
   private readonly layoutScreen: LayoutScreen = new LayoutScreen();
@@ -28,5 +29,19 @@ export class App {
 
     this.levels.chooseLevel();
     this.layoutScreen.addImageAnimation();
+  }
+
+  public resetProgress(): void {
+    this.levels.LEVELS_RESET.addEventListener('click', () => {
+      this.input.addAnimationPressBtn(this.levels.LEVELS_RESET);
+      const container = checkQuerySelector('#container');
+      container.innerHTML = '';
+
+      this.levels.resetLevels();
+      this.input.resetInput();
+      this.codeScreen.resetCodeScreen();
+      this.layoutScreen.resetLayoutScreen();
+      this.init();
+    });
   }
 }
