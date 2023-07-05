@@ -25,6 +25,8 @@ export class Input {
 
   private inputBtn: HTMLElement = this.createInputBtnElement();
 
+  private helpBtn: HTMLElement = this.createHelpBtnElement();
+
   constructor(levels: Levels) {
     this.LEVELS = levels;
   }
@@ -33,6 +35,44 @@ export class Input {
     if (event.code === 'Enter') {
       this.addAnimationPressBtn(this.inputBtn);
       this.checkAnswer(this.inputValue);
+    }
+  };
+
+  private readonly handleClick = (event: Event): void => {
+    const { target } = event;
+
+    if (target instanceof HTMLElement && target.className.includes('input__btn')) {
+      this.checkAnswer(this.inputValue);
+      this.addAnimationPressBtn(this.inputBtn);
+    }
+  };
+
+  private readonly handleHelpClick = async (event: Event): Promise<void> => {
+    const { target } = event;
+    const correctAnswer = GAME_LEVELS[this.LEVELS.getCurrentLevel()].answer;
+    const valueArr: string[] = correctAnswer.split('');
+    this.addAnimationPressBtn(this.helpBtn);
+
+    if (
+      target instanceof HTMLElement &&
+      target.className.includes('input__help-btn') &&
+      this.inputField.value !== correctAnswer
+    ) {
+      const appendValues = (index: number): Promise<void> =>
+        new Promise((resolve) => {
+          setTimeout(() => {
+            this.inputField.value += valueArr[index];
+            this.inputValue = this.inputField.value;
+            this.removeInputAnimation(this.inputField.value);
+
+            if (index < valueArr.length - 1) {
+              resolve(appendValues(index + 1));
+            } else {
+              resolve();
+            }
+          }, 150);
+        });
+      appendValues(0);
     }
   };
 
@@ -45,20 +85,6 @@ export class Input {
     element.classList.add('press-down');
     element.addEventListener('animationend', animationEndHandler);
   }
-
-  private readonly handleClick = (event: Event): void => {
-    const { target } = event;
-
-    if (target instanceof HTMLElement) {
-      if (target.className.includes('input__btn')) {
-        this.checkAnswer(this.inputValue);
-        this.inputBtn.classList.add('press-down');
-        this.inputBtn.addEventListener('animationend', () => {
-          this.inputBtn.classList.remove('press-down');
-        });
-      }
-    }
-  };
 
   public resetInput(): void {
     this.inputContainer = this.createInputContainer();
@@ -95,6 +121,14 @@ export class Input {
     return inputBtn;
   }
 
+  private createHelpBtnElement(): HTMLElement {
+    const helpBtn: HTMLDivElement = document.createElement(this.DIV_SELECTOR);
+    helpBtn.classList.add('input__help-btn');
+    helpBtn.innerText = 'help';
+
+    return helpBtn;
+  }
+
   public createInputLayout(): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
 
@@ -116,7 +150,7 @@ export class Input {
 
     inputWrapper.append(this.inputField, this.inputBtn);
     inputHeader.append(inputHeaderLeftTitle, inputHeaderRightTitle);
-    this.inputContainer.append(inputHeader, inputWrapper, inputText);
+    this.inputContainer.append(inputHeader, inputWrapper, inputText, this.helpBtn);
 
     fragment.appendChild(this.inputContainer);
 
@@ -143,6 +177,10 @@ export class Input {
     else this.inputField.classList.add('flicker');
   }
 
+  public pressHelpBtn(): void {
+    this.helpBtn.addEventListener('click', this.handleHelpClick);
+  }
+
   public pressInputBtn(): void {
     document.addEventListener('keydown', this.handleKeyPress);
     this.inputBtn.addEventListener('click', this.handleClick);
@@ -151,10 +189,12 @@ export class Input {
   private removeInputBtnListeners(): void {
     document.removeEventListener('keydown', this.handleKeyPress);
     this.inputBtn.removeEventListener('click', this.handleClick);
+    this.helpBtn.removeEventListener('click', this.handleHelpClick);
   }
 
   private checkAnswer(value: string): void {
-    if (value === GAME_LEVELS[this.LEVELS.getCurrentLevel()].answer) {
+    const currentAnswer = GAME_LEVELS[this.LEVELS.getCurrentLevel()].answer;
+    if (value === currentAnswer) {
       const levelItem = checkQuerySelector('.levels__list');
       const checkmark = levelItem.children[this.LEVELS.getCurrentLevel()].children[0];
       const nextBtn = checkQuerySelector('.levels__header-nav-next');

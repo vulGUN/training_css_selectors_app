@@ -23,11 +23,13 @@ export class App {
 
     this.input.setInputValue();
     this.input.pressInputBtn();
+    this.input.pressHelpBtn();
 
     this.levels.pressPrevAndNextBtn();
+    this.levels.chooseLevel();
+
     this.codeScreen.hoverEffectForCodeElements();
 
-    this.levels.chooseLevel();
     this.layoutScreen.addImageAnimation();
   }
 

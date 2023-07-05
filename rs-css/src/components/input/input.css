@@ -59,11 +59,31 @@
   font-size: 12px;
   cursor: pointer;
   user-select: none;
+  text-align: center;
 }
 
 .input__help-text {
   padding: 10px;
   font-size: 1em;
+}
+
+.input__help-btn {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  max-width: 50px;
+  margin: 0 auto;
+  background: #dcdcdc;
+  display: block;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #666;
+  border: solid 1px #999;
+  border-bottom: solid 3px #999;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
 }
 
 .flicker {
@@ -111,5 +131,18 @@
   }
   75% {
     transform: translateX(6px);
+  }
+}
+
+.appear {
+  animation: appear 1s forwards;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
