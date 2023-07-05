@@ -30,6 +30,7 @@ export class App {
 
     this.codeScreen.hoverEffectForCodeElements();
 
+    this.layoutScreen.hoverEffectForImages();
     this.layoutScreen.addImageAnimation();
   }
 

@@ -40,17 +40,6 @@ rectangle {
   justify-content: center;
 }
 
-circle:hover,
-square:hover,
-rhomb:hover,
-rectangle:hover {
-  box-shadow: 0 0 0 5px #ffffffc8;
-}
-
-.image-hover {
-  box-shadow: 0 0 0 5px #ffffffc8;
-}
-
 circle {
   background-color: #5f94c9;
   border-radius: 100%;
@@ -86,6 +75,10 @@ rectangle.small {
 .small {
   width: 40px;
   height: 40px;
+}
+
+.image-hover {
+  box-shadow: 0 0 0 5px #ffffffc8;
 }
 
 .scale {

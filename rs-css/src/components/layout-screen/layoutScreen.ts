@@ -1,6 +1,7 @@
 import './layoutScreen.css';
 import { GAME_LEVELS, CodeFragment } from '../levels/gameLevels';
 import { CodeScreen } from '../code-screen/codeScreen';
+import { checkQuerySelector } from '../../utils/checkQuerySelector';
 
 export class LayoutScreen {
   private readonly CODE_SCREEN: CodeScreen = new CodeScreen();
@@ -85,6 +86,33 @@ export class LayoutScreen {
 
     generateCodeRecursively(level.children, codeFragment);
     return codeFragment;
+  }
+
+  public hoverEffectForImages(): void {
+    const codeList = checkQuerySelector('.code-screen__body-text');
+    const imageList = checkQuerySelector('.layout-screen__image-wrap');
+
+    imageList.addEventListener('mouseover', (event: MouseEvent) => {
+      const { target } = event;
+
+      if (target && target instanceof HTMLElement && target !== imageList) {
+        target.classList.add('image-hover');
+        const dataId: string | null = target.getAttribute('data-code');
+        const codeElement: HTMLElement = checkQuerySelector(`[data-code="${dataId}"`, codeList);
+        codeElement.classList.add('highlight');
+      }
+    });
+
+    imageList.addEventListener('mouseout', (event: MouseEvent) => {
+      const { target } = event;
+
+      if (target instanceof HTMLElement && target !== imageList) {
+        target.classList.remove('image-hover');
+        const dataId: string | null = target.getAttribute('data-code');
+        const codeElement: HTMLElement = checkQuerySelector(`[data-code="${dataId}"`, codeList);
+        codeElement.classList.remove('highlight');
+      }
+    });
   }
 
   public addImageAnimation(index = 0): void {
