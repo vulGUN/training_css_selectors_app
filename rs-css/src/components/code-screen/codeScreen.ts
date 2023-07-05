@@ -65,6 +65,7 @@ export class CodeScreen {
   public generateCodeScreenBodyText(index = 0): DocumentFragment {
     const level: GameLevelType = GAME_LEVELS[index];
     const codeFragment = document.createDocumentFragment();
+    let dataIndex = 0;
 
     function generateCodeRecursively(
       codeElements: CodeFragment[],
@@ -72,6 +73,8 @@ export class CodeScreen {
     ): void {
       codeElements.forEach((item) => {
         const element = document.createElement('div');
+        element.setAttribute('data-code', `${dataIndex}`);
+        dataIndex += 1;
         element.textContent = item.startTag;
         parentElement.appendChild(element);
 
@@ -85,7 +88,6 @@ export class CodeScreen {
 
     generateCodeRecursively(level.code, codeFragment);
     return codeFragment;
-    console.log(this);
   }
 
   public hoverEffectForCodeElements(): void {
@@ -94,19 +96,23 @@ export class CodeScreen {
     codeList.addEventListener('mouseover', (event: MouseEvent) => {
       const { target } = event;
 
-      if (!target) throw new Error('Target element not found.');
-
-      if (target && (target as HTMLElement).firstChild?.textContent !== '<div class="container">') {
-        (target as HTMLElement).classList.add(this.HIGHLIGHT_SELECTOR);
+      if (target && target instanceof HTMLElement && target.firstChild?.textContent !== '<div class="container">') {
+        target.classList.add(this.HIGHLIGHT_SELECTOR);
+        const dataId: string | null = target.getAttribute('data-code');
+        const image: HTMLElement = checkQuerySelector(`[data-code="${dataId}"`);
+        image.classList.add('image-hover');
       }
     });
 
     codeList.addEventListener('mouseout', (event: MouseEvent) => {
       const { target } = event;
 
-      if (!target) throw new Error('Target element not found.');
-
-      (target as HTMLElement).classList.remove(this.HIGHLIGHT_SELECTOR);
+      if (target instanceof HTMLElement) {
+        target.classList.remove(this.HIGHLIGHT_SELECTOR);
+        const dataId: string | null = target.getAttribute('data-code');
+        const image: HTMLElement = checkQuerySelector(`[data-code="${dataId}"`);
+        image.classList.remove('image-hover');
+      }
     });
   }
 }

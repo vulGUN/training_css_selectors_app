@@ -58,6 +58,7 @@ export class LayoutScreen {
   public generateImageElement(index = 0): DocumentFragment {
     const level = GAME_LEVELS[index].code[0];
     const codeFragment = document.createDocumentFragment();
+    let dataIndex = 0;
 
     const generateCodeRecursively = (
       codeElements: CodeFragment[],
@@ -67,6 +68,8 @@ export class LayoutScreen {
         const startElement = document.createElement(this.DIV_SELECTOR);
         startElement.innerHTML = item.startTag;
         const element = startElement.firstChild;
+
+        if (element instanceof HTMLElement) element.setAttribute('data-code', `${(dataIndex += 1)}`);
 
         if (!element) throw Error('Element is null');
 

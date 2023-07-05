@@ -72,7 +72,7 @@ export class Input {
             }
           }, 150);
         });
-      appendValues(0);
+      appendValues(this.inputField.value.length);
     }
   };
 
