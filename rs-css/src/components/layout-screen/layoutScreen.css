@@ -4,7 +4,7 @@
 }
 
 .layout-screen__title {
-  font-size: 1.6em;
+  font-size: 1.8em;
   font-weight: 300;
   text-align: center;
 }
@@ -23,7 +23,7 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  column-gap: 20px;
+  column-gap: 30px;
 }
 
 circle,
@@ -34,7 +34,6 @@ rectangle {
   width: 80px;
   height: 80px;
   border-bottom: 4px solid #00000066;
-  /* box-shadow: 0px 5px 15px #00000053; */
   filter: drop-shadow(0px 5px 10px #00000053);
   display: flex;
   align-items: center;
@@ -71,6 +70,7 @@ rhomb {
 
 rectangle {
   width: 40px;
+  height: 60px;
   background-color: #5fc968;
   border-radius: 10px;
 }
