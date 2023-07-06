@@ -21,13 +21,20 @@ export class Levels {
 
   public LEVELS_RESET: HTMLElement = this.createLevelsResetBtn();
 
-  private currentLevel = 0;
+  private currentLevel = this.getLocalStorageCurrentLevel();
 
   public resetLevels(): void {
     this.currentLevel = 0;
     this.LEVELS_LIST = this.createLevelList();
     this.prevBtn = this.createLevelsPrevBtn();
     this.nextBtn = this.createLevelsNextBtn();
+  }
+
+  public getLocalStorageCurrentLevel(): number {
+    const currentLevel = localStorage.getItem('currentLevel');
+    if (currentLevel) this.currentLevel = +currentLevel;
+    else this.currentLevel = 0;
+    return this.currentLevel;
   }
 
   private createLevelsResetBtn(): HTMLElement {
@@ -87,10 +94,6 @@ export class Levels {
 
     const levelListItems = this.generateLevelsList();
 
-    const levelListItemTitle = document.createElement('div');
-    levelListItemTitle.classList.add('levels__list-item-title');
-    levelListItemTitle.textContent = '#ID';
-
     levelHeaderLeftSide.append(levelsText);
     levelHeaderRightSide.append(this.prevBtn, this.nextBtn);
 
@@ -107,13 +110,20 @@ export class Levels {
 
   private generateLevelsList(): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
+    const levelsSelectors: string | null = localStorage.getItem('comletedLevels');
+
+    console.log(levelsSelectors);
 
     GAME_LEVELS.forEach((item, index) => {
       const levelListItem = document.createElement(this.DIV_SELECTOR);
       levelListItem.classList.add('levels__list-item');
 
       const levelsCheckmark = document.createElement(this.DIV_SELECTOR);
-      levelsCheckmark.classList.add('levels__header-checkmark');
+
+      if (levelsSelectors && levelsSelectors !== '[]') {
+        const comletedLevels: string[] = JSON.parse(levelsSelectors);
+        comletedLevels[index].split(' ').forEach((selector: string) => levelsCheckmark.classList.add(selector));
+      } else levelsCheckmark.classList.add('levels__header-checkmark');
 
       const levelListItemNumber = document.createElement(this.DIV_SELECTOR);
       levelListItemNumber.classList.add('levels__list-item-number');
@@ -182,6 +192,16 @@ export class Levels {
     }
 
     this.nextOrPrevLevel();
+  }
+
+  public setLocalStorage(): void {
+    localStorage.setItem('currentLevel', `${this.currentLevel}`);
+
+    const checkmarks = document.querySelectorAll('.levels__header-checkmark');
+    const comletedLevels: string[] = [];
+    checkmarks.forEach((item) => comletedLevels.push(item.className));
+
+    localStorage.setItem('comletedLevels', JSON.stringify(comletedLevels));
   }
 
   private nextOrPrevLevel(): void {

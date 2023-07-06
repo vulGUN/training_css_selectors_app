@@ -1,11 +1,8 @@
 import './layoutScreen.css';
 import { GAME_LEVELS, CodeFragment } from '../levels/gameLevels';
-import { CodeScreen } from '../code-screen/codeScreen';
 import { checkQuerySelector } from '../../utils/checkQuerySelector';
 
 export class LayoutScreen {
-  private readonly CODE_SCREEN: CodeScreen = new CodeScreen();
-
   private readonly DIV_SELECTOR = 'div';
 
   private readonly layoutScreenSelector = 'layout-screen';
@@ -23,7 +20,7 @@ export class LayoutScreen {
     return imageWrap;
   }
 
-  public createCodeScreenLayout(): DocumentFragment {
+  public createCodeScreenLayout(currentLevel: number): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
 
     const layoutScreenWrap = document.createElement('div');
@@ -31,9 +28,9 @@ export class LayoutScreen {
 
     const layoutScreenTitle = document.createElement('h2');
     layoutScreenTitle.classList.add('layout-screen__title');
-    layoutScreenTitle.textContent = 'Select the circles';
+    layoutScreenTitle.textContent = GAME_LEVELS[currentLevel].title || GAME_LEVELS[0].title;
 
-    const imageWrap = this.createImage();
+    const imageWrap = this.createImage(currentLevel);
 
     layoutScreenWrap.append(layoutScreenTitle, imageWrap);
     fragment.appendChild(layoutScreenWrap);
@@ -41,13 +38,13 @@ export class LayoutScreen {
     return fragment;
   }
 
-  private createImage(): DocumentFragment {
+  private createImage(currentLevel: number): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
 
     const imageContainer: HTMLDivElement = document.createElement(this.DIV_SELECTOR);
     imageContainer.classList.add('layout-screen__image');
 
-    const image = this.generateImageElement();
+    const image = this.generateImageElement(currentLevel);
 
     this.imageWrapper.appendChild(image);
     imageContainer.appendChild(this.imageWrapper);
@@ -160,7 +157,6 @@ export class LayoutScreen {
         break;
       default:
         console.log('Nothing');
-        console.log(this);
     }
   }
 }

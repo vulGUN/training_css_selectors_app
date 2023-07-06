@@ -14,12 +14,13 @@ export class App {
   private readonly codeScreen: CodeScreen = new CodeScreen();
 
   public init(): void {
-    const container = document.querySelector('#container');
+    const container: Element | null = checkQuerySelector('#container');
+    const currentLevel: number = this.levels.getLocalStorageCurrentLevel();
 
-    container?.appendChild(this.layoutScreen.createCodeScreenLayout());
-    container?.appendChild(this.levels.createLevelsLayout());
-    container?.appendChild(this.codeScreen.createCodeScreenLayout());
-    container?.appendChild(this.input.createInputLayout());
+    container.appendChild(this.layoutScreen.createCodeScreenLayout(currentLevel));
+    container.appendChild(this.levels.createLevelsLayout());
+    container.appendChild(this.codeScreen.createCodeScreenLayout(currentLevel));
+    container.appendChild(this.input.createInputLayout());
 
     this.input.setInputValue();
     this.input.pressInputBtn();
@@ -31,15 +32,20 @@ export class App {
     this.codeScreen.hoverEffectForCodeElements();
 
     this.layoutScreen.hoverEffectForImages();
-    this.layoutScreen.addImageAnimation();
+    this.layoutScreen.addImageAnimation(currentLevel);
+
+    window.addEventListener('beforeunload', () => {
+      this.levels.setLocalStorage();
+    });
   }
 
   public resetProgress(): void {
     this.levels.LEVELS_RESET.addEventListener('click', () => {
       this.input.addAnimationPressBtn(this.levels.LEVELS_RESET);
-      const container = checkQuerySelector('#container');
+      const container: HTMLElement = checkQuerySelector('#container');
       container.innerHTML = '';
 
+      localStorage.clear();
       this.levels.resetLevels();
       this.input.resetInput();
       this.codeScreen.resetCodeScreen();

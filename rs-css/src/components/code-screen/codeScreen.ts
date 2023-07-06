@@ -36,7 +36,7 @@ export class CodeScreen {
     return this.CODE_SCREEN_CONTAINER;
   }
 
-  public createCodeScreenLayout(): DocumentFragment {
+  public createCodeScreenLayout(currentLevel: number): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
 
     const CodeScreenHeader: HTMLDivElement = document.createElement('div');
@@ -52,7 +52,7 @@ export class CodeScreen {
     CodeScreenBody.classList.add('code-screen__body');
 
     CodeScreenHeader.append(CodeScreenHeaderLeftTitle, CodeScreenHeaderRightTitle);
-    this.CODE_SCREEN_BODY_TEXT.appendChild(this.generateCodeScreenBodyText());
+    this.CODE_SCREEN_BODY_TEXT.appendChild(this.generateCodeScreenBodyText(currentLevel));
 
     CodeScreenBody.append(this.CODE_SCREEN_BODY_TEXT);
     this.CODE_SCREEN_CONTAINER.append(CodeScreenHeader, CodeScreenBody);
