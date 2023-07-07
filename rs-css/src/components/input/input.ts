@@ -192,20 +192,46 @@ export class Input {
     this.helpBtn.removeEventListener('click', this.handleHelpClick);
   }
 
-  private checkAnswer(value: string): void {
+  private checkAnswer(inputAnswer: string): void {
     const currentAnswer = GAME_LEVELS[this.LEVELS.getCurrentLevel()].answer;
-    if (value === currentAnswer) {
-      const levelItem = checkQuerySelector('.levels__list');
-      const checkmark = levelItem.children[this.LEVELS.getCurrentLevel()].children[0];
-      const nextBtn = checkQuerySelector('.levels__header-nav-next');
-      checkmark.classList.add('completed');
-      this.LEVELS.changeLevel(nextBtn);
-      this.inputField.value = '';
-      this.removeInputAnimation(this.inputField.value);
-      this.checkWin();
+    if (inputAnswer === currentAnswer) {
+      this.addFadeAnimation();
     } else {
       this.addJiggleAnimation(this.inputContainer);
     }
+  }
+
+  private addFadeAnimation(): void {
+    const elements: NodeListOf<Element> = document.querySelectorAll('.scale');
+    let animationCount = 0;
+
+    const fadeAnimationEnd = (): void => {
+      animationCount += 1;
+
+      if (animationCount === elements.length) {
+        elements.forEach((item) => {
+          item.classList.remove('fade');
+          item.removeEventListener('animationend', fadeAnimationEnd);
+        });
+        this.nextLevel();
+      }
+    };
+
+    elements.forEach((item) => {
+      item.classList.add('fade');
+      item.addEventListener('animationend', fadeAnimationEnd);
+    });
+  }
+
+  private nextLevel(): void {
+    const levelItem: HTMLElement = checkQuerySelector('.levels__list');
+    const checkmark: Element = levelItem.children[this.LEVELS.getCurrentLevel()].children[0];
+    const nextBtn: HTMLElement = checkQuerySelector('.levels__header-nav-next');
+    checkmark.classList.add('completed');
+    this.LEVELS.changeLevel(nextBtn);
+    this.inputField.value = '';
+    this.removeInputAnimation(this.inputField.value);
+    this.checkWin();
   }
 
   private checkWin(): void {
