@@ -47,7 +47,7 @@ export const GAME_LEVELS: GameLevelType[] = [
     ],
   },
   {
-    title: 'Select the small rhombs',
+    title: 'Select the small bungs',
     menuTitle: '.classname',
     answer: '.small',
     level: '3',
@@ -56,12 +56,12 @@ export const GAME_LEVELS: GameLevelType[] = [
         startTag: '<div class="container">',
         endTag: '</div>',
         children: [
-          { startTag: '<rhomb />', endTag: '' },
-          { startTag: '<rhomb class="small" />', endTag: '' },
+          { startTag: '<bung />', endTag: '' },
+          { startTag: '<bung class="small" />', endTag: '' },
           {
             startTag: '<circle>',
             endTag: '</circle>',
-            children: [{ startTag: '<rhomb class="small" />', endTag: '' }],
+            children: [{ startTag: '<bung class="small" />', endTag: '' }],
           },
           { startTag: '<circle />', endTag: '' },
         ],
@@ -78,8 +78,8 @@ export const GAME_LEVELS: GameLevelType[] = [
         startTag: '<div class="container">',
         endTag: '</div>',
         children: [
-          { startTag: '<rhomb />', endTag: '' },
-          { startTag: '<rhomb class="small" />', endTag: '' },
+          { startTag: '<bung />', endTag: '' },
+          { startTag: '<bung class="small" />', endTag: '' },
           {
             startTag: '<square>',
             endTag: '</square>',
@@ -105,7 +105,7 @@ export const GAME_LEVELS: GameLevelType[] = [
         startTag: '<div class="container">',
         endTag: '</div>',
         children: [
-          { startTag: '<rhomb />', endTag: '' },
+          { startTag: '<bung />', endTag: '' },
           {
             startTag: '<circle>',
             endTag: '</circle>',
@@ -122,9 +122,9 @@ export const GAME_LEVELS: GameLevelType[] = [
     ],
   },
   {
-    title: "Select every rhomb that's next to a circle",
+    title: "Select every bung that's next to a circle",
     menuTitle: 'A + B',
-    answer: 'circle + .small, circle + rhomb',
+    answer: 'circle + .small, circle + bung',
     level: '6',
     code: [
       {
@@ -137,11 +137,11 @@ export const GAME_LEVELS: GameLevelType[] = [
             children: [{ startTag: '<rectangle class="small" />', endTag: '' }],
           },
           { startTag: '<circle />', endTag: '' },
-          { startTag: '<rhomb class="small" />', endTag: '' },
+          { startTag: '<bung class="small" />', endTag: '' },
           { startTag: '<circle />', endTag: '' },
-          { startTag: '<rhomb />', endTag: '' },
-          { startTag: '<rhomb class="small" />', endTag: '' },
-          { startTag: '<rhomb class="small" />', endTag: '' },
+          { startTag: '<bung />', endTag: '' },
+          { startTag: '<bung class="small" />', endTag: '' },
+          { startTag: '<bung class="small" />', endTag: '' },
         ],
       },
     ],
@@ -165,21 +165,21 @@ export const GAME_LEVELS: GameLevelType[] = [
     ],
   },
   {
-    title: 'Select all even circles',
+    title: 'Select all even squares',
     menuTitle: ':nth-of-type(A)',
-    answer: 'circle:nth-of-type(even)',
+    answer: 'square:nth-of-type(even)',
     level: '8',
     code: [
       {
         startTag: '<div class="container">',
         endTag: '</div>',
         children: [
-          { startTag: '<circle />', endTag: '' },
-          { startTag: '<circle />', endTag: '' },
-          { startTag: '<circle />', endTag: '' },
-          { startTag: '<circle />', endTag: '' },
-          { startTag: '<circle class="small" />', endTag: '' },
-          { startTag: '<circle />', endTag: '' },
+          { startTag: '<square />', endTag: '' },
+          { startTag: '<square />', endTag: '' },
+          { startTag: '<square />', endTag: '' },
+          { startTag: '<square />', endTag: '' },
+          { startTag: '<square class="small" />', endTag: '' },
+          { startTag: '<square />', endTag: '' },
         ],
       },
     ],
@@ -207,9 +207,9 @@ export const GAME_LEVELS: GameLevelType[] = [
     ],
   },
   {
-    title: 'Select the big rhombs',
+    title: 'Select the big bungs',
     menuTitle: ':not(X)',
-    answer: 'rhomb:not(.small)',
+    answer: 'bung:not(.small)',
     level: '10',
     code: [
       {
@@ -219,10 +219,10 @@ export const GAME_LEVELS: GameLevelType[] = [
           {
             startTag: '<circle>',
             endTag: '</circle>',
-            children: [{ startTag: '<rhomb class="small" />', endTag: '' }],
+            children: [{ startTag: '<bung class="small" />', endTag: '' }],
           },
-          { startTag: '<circle>', endTag: '</circle>', children: [{ startTag: '<rhomb />', endTag: '' }] },
-          { startTag: '<rhomb />', endTag: '' },
+          { startTag: '<circle>', endTag: '</circle>', children: [{ startTag: '<bung />', endTag: '' }] },
+          { startTag: '<bung />', endTag: '' },
           {
             startTag: '<circle>',
             endTag: '</circle>',

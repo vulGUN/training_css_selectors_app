@@ -7,7 +7,7 @@ export class LayoutScreen {
 
   private readonly layoutScreenSelector = 'layout-screen';
 
-  private imageWrapper = this.createImageWrapper();
+  private imageWrapper: HTMLElement = this.createImageWrapper();
 
   public resetLayoutScreen(): void {
     this.imageWrapper = this.createImageWrapper();
@@ -44,7 +44,7 @@ export class LayoutScreen {
     const imageContainer: HTMLDivElement = document.createElement(this.DIV_SELECTOR);
     imageContainer.classList.add('layout-screen__image');
 
-    const image = this.generateImageElement(currentLevel);
+    const image: DocumentFragment = this.generateImageElement(currentLevel);
 
     this.imageWrapper.appendChild(image);
     imageContainer.appendChild(this.imageWrapper);
@@ -54,8 +54,8 @@ export class LayoutScreen {
   }
 
   public generateImageElement(index = 0): DocumentFragment {
-    const level = GAME_LEVELS[index].code[0];
-    const codeFragment = document.createDocumentFragment();
+    const level: CodeFragment = GAME_LEVELS[index].code[0];
+    const codeFragment: DocumentFragment = document.createDocumentFragment();
     let dataIndex = 0;
 
     const generateCodeRecursively = (
@@ -63,31 +63,31 @@ export class LayoutScreen {
       parentElement: DocumentFragment | ChildNode,
     ): void => {
       codeElements.forEach((item: CodeFragment): void => {
-        const startElement = document.createElement(this.DIV_SELECTOR);
+        const startElement: HTMLDivElement = document.createElement(this.DIV_SELECTOR);
         startElement.innerHTML = item.startTag;
-        const element = startElement.firstChild;
+        const element: ChildNode | null = startElement.firstChild;
 
-        if (element instanceof HTMLElement) element.setAttribute('data-code', `${(dataIndex += 1)}`);
+        if (element instanceof HTMLElement) {
+          element.setAttribute('data-code', `${(dataIndex += 1)}`);
+          parentElement.appendChild(element);
+        }
 
-        if (!element) throw Error('Element is null');
-
-        parentElement.appendChild(element);
-
-        if (item.children && item.children.length > 0) {
+        if (element && item.children && item.children.length > 0) {
           generateCodeRecursively(item.children, element);
         }
       });
     };
 
-    if (!level.children) throw Error('Level.children is null');
+    if (level.children) {
+      generateCodeRecursively(level.children, codeFragment);
+    }
 
-    generateCodeRecursively(level.children, codeFragment);
     return codeFragment;
   }
 
   public hoverEffectForImages(): void {
-    const codeList = checkQuerySelector('.code-screen__body-text');
-    const imageList = checkQuerySelector('.layout-screen__image-wrap');
+    const codeList: HTMLElement = checkQuerySelector('.code-screen__body-text');
+    const imageList: HTMLElement = checkQuerySelector('.layout-screen__image-wrap');
 
     imageList.addEventListener('mouseover', (event: MouseEvent) => {
       const { target } = event;
@@ -113,47 +113,47 @@ export class LayoutScreen {
   }
 
   public addImageAnimation(index = 0): void {
-    const circles = document.querySelectorAll('circle');
-    const fancy = document.querySelector('#fancy');
-    const smallRhombs = document.querySelectorAll('.small');
-    const smallRectangles = document.querySelectorAll('rectangle.small');
-    const all = document.querySelectorAll('.layout-screen__image-wrap *');
-    const everyRhomb = document.querySelectorAll('circle + rhomb.small, circle + rhomb');
-    const nthChild = document.querySelector('circle:nth-of-type(3)');
-    const even = document.querySelectorAll('circle:nth-of-type(even)');
-    const squareEmpty = document.querySelectorAll('square:empty');
-    const bigRhombs = document.querySelectorAll('rhomb:not(.small)');
+    const circles: NodeListOf<SVGCircleElement> = document.querySelectorAll('circle');
+    const fancy: Element | null = document.querySelector('#fancy');
+    const smallBungs: NodeListOf<Element> = document.querySelectorAll('.small');
+    const smallRectangles: NodeListOf<Element> = document.querySelectorAll('rectangle.small');
+    const all: NodeListOf<Element> = document.querySelectorAll('.layout-screen__image-wrap *');
+    const everyBung: NodeListOf<Element> = document.querySelectorAll('circle + bung.small, circle + bung');
+    const nthChild: Element | null = document.querySelector('circle:nth-of-type(3)');
+    const even: NodeListOf<Element> = document.querySelectorAll('square:nth-of-type(even)');
+    const squareEmpty: NodeListOf<Element> = document.querySelectorAll('square:empty');
+    const bigBungs: NodeListOf<Element> = document.querySelectorAll('bung:not(.small)');
 
     switch (index) {
       case 0:
-        circles.forEach((item) => item.classList.add('scale'));
+        circles.forEach((item: SVGCircleElement): void => item.classList.add('scale'));
         break;
       case 1:
         fancy?.classList.add('scale');
         break;
       case 2:
-        smallRhombs.forEach((item) => item.classList.add('scale'));
+        smallBungs.forEach((item: Element): void => item.classList.add('scale'));
         break;
       case 3:
-        smallRectangles.forEach((item) => item.classList.add('scale'));
+        smallRectangles.forEach((item: Element): void => item.classList.add('scale'));
         break;
       case 4:
-        all.forEach((item) => item.classList.add('scale'));
+        all.forEach((item: Element): void => item.classList.add('scale'));
         break;
       case 5:
-        everyRhomb.forEach((item) => item.classList.add('scale'));
+        everyBung.forEach((item: Element): void => item.classList.add('scale'));
         break;
       case 6:
         nthChild?.classList.add('scale');
         break;
       case 7:
-        even.forEach((item) => item.classList.add('scale'));
+        even.forEach((item: Element): void => item.classList.add('scale'));
         break;
       case 8:
-        squareEmpty.forEach((item) => item.classList.add('scale'));
+        squareEmpty.forEach((item: Element): void => item.classList.add('scale'));
         break;
       case 9:
-        bigRhombs.forEach((item) => item.classList.add('scale'));
+        bigBungs.forEach((item: Element): void => item.classList.add('scale'));
         break;
       default:
         console.log('Nothing');

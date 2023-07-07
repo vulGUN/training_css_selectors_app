@@ -21,7 +21,7 @@ export class Levels {
 
   public LEVELS_RESET: HTMLElement = this.createLevelsResetBtn();
 
-  private currentLevel = this.getLocalStorageCurrentLevel();
+  private currentLevel: number = this.getLocalStorageCurrentLevel();
 
   public resetLevels(): void {
     this.currentLevel = 0;
@@ -31,14 +31,14 @@ export class Levels {
   }
 
   public getLocalStorageCurrentLevel(): number {
-    const currentLevel = localStorage.getItem('currentLevel');
+    const currentLevel: string | null = localStorage.getItem('currentLevel');
     if (currentLevel) this.currentLevel = +currentLevel;
     else this.currentLevel = 0;
     return this.currentLevel;
   }
 
   private createLevelsResetBtn(): HTMLElement {
-    const levelResetBtn = document.createElement(this.DIV_SELECTOR);
+    const levelResetBtn: HTMLElement = document.createElement(this.DIV_SELECTOR);
     levelResetBtn.classList.add('levels__reset-btn');
     levelResetBtn.innerText = 'Reset progress';
 
@@ -46,14 +46,14 @@ export class Levels {
   }
 
   private createLevelsPrevBtn(): HTMLElement {
-    const levelNavigationPrev = document.createElement(this.DIV_SELECTOR);
+    const levelNavigationPrev: HTMLElement = document.createElement(this.DIV_SELECTOR);
     levelNavigationPrev.classList.add('levels__header-nav-prev');
 
     return levelNavigationPrev;
   }
 
   private createLevelsNextBtn(): HTMLElement {
-    const levelNavigationNext = document.createElement(this.DIV_SELECTOR);
+    const levelNavigationNext: HTMLElement = document.createElement(this.DIV_SELECTOR);
     levelNavigationNext.classList.add('levels__header-nav-next');
 
     return levelNavigationNext;
@@ -64,7 +64,7 @@ export class Levels {
   }
 
   private createLevelList(): HTMLElement {
-    const levelsList = document.createElement(this.DIV_SELECTOR);
+    const levelsList: HTMLElement = document.createElement(this.DIV_SELECTOR);
     levelsList.classList.add('levels__list');
 
     return levelsList;
@@ -73,26 +73,26 @@ export class Levels {
   public createLevelsLayout(): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
 
-    const levelsContainer = document.createElement('div');
+    const levelsContainer: HTMLElement = document.createElement('div');
     levelsContainer.classList.add(this.LEVELS_SELECTOR);
 
-    const levelHeaderLeftSide = document.createElement('div');
+    const levelHeaderLeftSide: HTMLElement = document.createElement('div');
     levelHeaderLeftSide.classList.add('levels__left-side');
 
-    const levelsHeader = document.createElement('div');
+    const levelsHeader: HTMLElement = document.createElement('div');
     levelsHeader.classList.add('levels__header');
 
-    const levelsText = document.createElement('div');
+    const levelsText: HTMLElement = document.createElement('div');
     levelsText.classList.add('levels__header-text');
     levelsText.textContent = `Level ${this.currentLevel + 1} of ${GAME_LEVELS.length}`;
 
-    const levelHeaderRightSide = document.createElement('div');
+    const levelHeaderRightSide: HTMLElement = document.createElement('div');
     levelHeaderRightSide.classList.add('levels__right-side');
 
-    const levelNavigation = document.createElement('div');
+    const levelNavigation: HTMLElement = document.createElement('div');
     levelNavigation.classList.add('levels__header-nav');
 
-    const levelListItems = this.generateLevelsList();
+    const levelListItems: DocumentFragment = this.generateLevelsList();
 
     levelHeaderLeftSide.append(levelsText);
     levelHeaderRightSide.append(this.prevBtn, this.nextBtn);
@@ -112,24 +112,22 @@ export class Levels {
     const fragment: DocumentFragment = document.createDocumentFragment();
     const levelsSelectors: string | null = localStorage.getItem('comletedLevels');
 
-    console.log(levelsSelectors);
-
     GAME_LEVELS.forEach((item, index) => {
-      const levelListItem = document.createElement(this.DIV_SELECTOR);
+      const levelListItem: HTMLElement = document.createElement(this.DIV_SELECTOR);
       levelListItem.classList.add('levels__list-item');
 
-      const levelsCheckmark = document.createElement(this.DIV_SELECTOR);
+      const levelsCheckmark: HTMLElement = document.createElement(this.DIV_SELECTOR);
 
       if (levelsSelectors && levelsSelectors !== '[]') {
         const comletedLevels: string[] = JSON.parse(levelsSelectors);
         comletedLevels[index].split(' ').forEach((selector: string) => levelsCheckmark.classList.add(selector));
       } else levelsCheckmark.classList.add('levels__header-checkmark');
 
-      const levelListItemNumber = document.createElement(this.DIV_SELECTOR);
+      const levelListItemNumber: HTMLElement = document.createElement(this.DIV_SELECTOR);
       levelListItemNumber.classList.add('levels__list-item-number');
       levelListItemNumber.textContent = item.level;
 
-      const levelListItemTitle = document.createElement(this.DIV_SELECTOR);
+      const levelListItemTitle: HTMLElement = document.createElement(this.DIV_SELECTOR);
       levelListItemTitle.classList.add('levels__list-item-title');
       levelListItemTitle.textContent = item.menuTitle;
 
@@ -157,7 +155,6 @@ export class Levels {
   public chooseLevel(): void {
     this.LEVELS_LIST.addEventListener('click', (event: MouseEvent) => {
       const { target } = event;
-      if (!target) throw Error('');
 
       if (target instanceof HTMLElement) {
         const clickedItem = target.closest('.levels__list-item');

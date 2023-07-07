@@ -7,7 +7,7 @@ import { checkQuerySelector } from '../../utils/checkQuerySelector';
 export class Input {
   private CODE_SCREEN: CodeScreen = new CodeScreen();
 
-  private readonly COMPLETE_SELECTOR = '.completed';
+  private readonly COMPLETE_SELECTOR: string = '.completed';
 
   private readonly LEVELS: Levels;
 

@@ -3,9 +3,9 @@ import { GAME_LEVELS, GameLevelType, CodeFragment } from '../levels/gameLevels';
 import { checkQuerySelector } from '../../utils/checkQuerySelector';
 
 export class CodeScreen {
-  private readonly DIV_SELECTOR = 'div';
+  private readonly DIV_SELECTOR: string = 'div';
 
-  private readonly HIGHLIGHT_SELECTOR = 'highlight';
+  private readonly HIGHLIGHT_SELECTOR: string = 'highlight';
 
   private readonly CODE_SCREEN_SELECTOR: string = 'code-screen';
 
@@ -19,14 +19,14 @@ export class CodeScreen {
   }
 
   private createCodeScreenContainer(): HTMLElement {
-    const codeScreenContainer = document.createElement(this.DIV_SELECTOR);
+    const codeScreenContainer: HTMLElement = document.createElement(this.DIV_SELECTOR);
     codeScreenContainer.classList.add(this.CODE_SCREEN_SELECTOR);
 
     return codeScreenContainer;
   }
 
   private createCodeScreenBodyText(): HTMLElement {
-    const codeScreenBodyText: HTMLDivElement = document.createElement(this.DIV_SELECTOR);
+    const codeScreenBodyText: HTMLElement = document.createElement(this.DIV_SELECTOR);
     codeScreenBodyText.classList.add('code-screen__body-text');
 
     return codeScreenBodyText;
@@ -91,7 +91,7 @@ export class CodeScreen {
   }
 
   public hoverEffectForCodeElements(): void {
-    const codeList = checkQuerySelector('.code-screen__body-text');
+    const codeList: HTMLElement = checkQuerySelector('.code-screen__body-text');
 
     codeList.addEventListener('mouseover', (event: MouseEvent) => {
       const { target } = event;
