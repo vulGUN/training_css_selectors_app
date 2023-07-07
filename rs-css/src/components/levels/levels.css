@@ -1,7 +1,4 @@
-:root {
-  --input-btn: #cfeebd;
-  --main-bg: #4a5443;
-}
+@import url(../../global.css);
 
 .levels {
   position: relative;

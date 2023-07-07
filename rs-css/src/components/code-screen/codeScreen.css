@@ -1,7 +1,4 @@
-:root {
-  --input-btn: #cfeebd;
-  --main-bg: #4a5443;
-}
+@import url(../../global.css);
 
 .code-screen {
   grid-area: 2 / 2 / 4 / 3;

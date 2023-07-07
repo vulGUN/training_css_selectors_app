@@ -1,5 +1,10 @@
 :root {
   --main-bg: #4a5443;
+  --input-bg: #cfeebd;
+  --circle-image-bg: #5f94c9;
+  --square-image-bg: #d0ce5b;
+  --bung-image-bg: #c95f5f;
+  --rectangle-image-bg: #5fc968;
 }
 
 * {
