@@ -70,6 +70,8 @@
   background-color: #3a4235;
   border: 1px solid #8ea382;
   border-radius: 10px;
+  max-height: 80vh;
+  overflow: auto;
 }
 
 .levels__list-item {
