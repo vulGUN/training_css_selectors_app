@@ -26,13 +26,12 @@ export class Levels {
 
   constructor(gameLevelStore: GameLevelStore) {
     this.GAME_LEVEL_STORE = gameLevelStore;
+    this.pressPrevAndNextBtn();
   }
 
   public resetLevels(): void {
     this.GAME_LEVEL_STORE.currentLevel = this.GAME_LEVEL_STORE.firstLevel;
     this.LEVELS_LIST = this.createLevelList();
-    this.prevBtn = this.createLevelsPrevBtn();
-    this.nextBtn = this.createLevelsNextBtn();
   }
 
   private createLevelsResetBtn(): HTMLElement {

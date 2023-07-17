@@ -11,6 +11,10 @@ export class Input {
 
   private readonly LEVELS: Levels;
 
+  private readonly WIN_TITLE: string = "🎉Congratulations, you've won!🎉";
+
+  private readonly TEXT_HELP: string = '/* Styles would go here. */';
+
   private readonly INPUT_SELECTOR = 'input';
 
   private readonly DIV_SELECTOR = 'div';
@@ -141,7 +145,7 @@ export class Input {
 
     const inputText: HTMLElement = document.createElement('div');
     inputText.classList.add('input__help-text');
-    inputText.innerText = '/* Styles would go here. */';
+    inputText.innerText = this.TEXT_HELP;
 
     const inputWrapper: HTMLDivElement = document.createElement('div');
     inputWrapper.classList.add('input__wrapper');
@@ -157,12 +161,12 @@ export class Input {
 
   public setInputValue(): void {
     this.inputField.addEventListener('input', (event: Event) => {
-      // ?разобраться как работает <HTMLInputElement>event.target;
+      if (event.target instanceof HTMLInputElement) {
+        const { value } = event.target;
+        this.inputValue = value;
 
-      const { value } = <HTMLInputElement>event.target;
-      this.inputValue = value;
-
-      this.removeInputAnimation(value);
+        this.removeInputAnimation(value);
+      }
     });
   }
 
@@ -236,7 +240,7 @@ export class Input {
     const completedLevel: NodeListOf<Element> = document.querySelectorAll(this.COMPLETE_SELECTOR);
     const title: HTMLElement = checkQuerySelector('.layout-screen__title');
     if (completedLevel.length === GAME_LEVELS.length) {
-      title.innerText = "🎉Congratulations, you've won!🎉";
+      title.innerText = this.WIN_TITLE;
     }
   }
 

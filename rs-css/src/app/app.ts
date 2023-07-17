@@ -18,7 +18,7 @@ export class App {
 
   public init(): void {
     const container: Element = checkQuerySelector('#container');
-    const currentLevel: number = this.gameLevelStore.getLocalStorageCurrentLevel();
+    const currentLevel: number = this.levels.getCurrentLevel();
 
     container.appendChild(this.layoutScreen.createCodeScreenLayout(currentLevel));
     container.appendChild(this.levels.createLevelsLayout());
@@ -29,9 +29,7 @@ export class App {
     this.input.pressInputBtn();
     this.input.pressHelpBtn();
 
-    this.levels.pressPrevAndNextBtn();
     this.levels.chooseLevel();
-    this.gameLevelStore.addBeforeUnloadListener();
 
     this.codeScreen.hoverEffectForCodeElements();
 
