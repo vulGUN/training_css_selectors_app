@@ -17,8 +17,6 @@ export class Input {
 
   private inputValue = '';
 
-  // !поменять inputContainer на общий селектор / создать его
-
   private inputContainer: HTMLElement = this.createInputContainer();
 
   private inputField: HTMLInputElement = this.createInputFieldElement();
@@ -247,13 +245,11 @@ export class Input {
 
     element.classList.add('jiggle');
     codeScreenContainer.classList.add('jiggle');
-    document.querySelector('.code-screen')?.classList.add('jiggle');
-
-    // !не применяются стили к codeScreenContainer, в консоли все ок.
+    checkQuerySelector('.code-screen').classList.add('jiggle');
 
     element.addEventListener('animationend', () => {
       element.classList.remove('jiggle');
-      document.querySelector('.code-screen')?.classList.remove('jiggle');
+      checkQuerySelector('.code-screen').classList.remove('jiggle');
     });
   }
 }

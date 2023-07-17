@@ -14,7 +14,7 @@ export class App {
   private readonly codeScreen: CodeScreen = new CodeScreen();
 
   public init(): void {
-    const container: Element | null = checkQuerySelector('#container');
+    const container: Element = checkQuerySelector('#container');
     const currentLevel: number = this.levels.getLocalStorageCurrentLevel();
 
     container.appendChild(this.layoutScreen.createCodeScreenLayout(currentLevel));
@@ -28,15 +28,12 @@ export class App {
 
     this.levels.pressPrevAndNextBtn();
     this.levels.chooseLevel();
+    this.levels.addBeforeUnloadListener();
 
     this.codeScreen.hoverEffectForCodeElements();
 
     this.layoutScreen.hoverEffectForImages();
     this.layoutScreen.addImageAnimation(currentLevel);
-
-    window.addEventListener('beforeunload', () => {
-      this.levels.setLocalStorage();
-    });
   }
 
   public resetProgress(): void {
@@ -45,7 +42,7 @@ export class App {
       const container: HTMLElement = checkQuerySelector('#container');
       container.innerHTML = '';
 
-      localStorage.clear();
+      this.levels.clearStore();
       this.levels.resetLevels();
       this.input.resetInput();
       this.codeScreen.resetCodeScreen();

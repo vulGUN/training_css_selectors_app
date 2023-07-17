@@ -23,8 +23,10 @@ export class Levels {
 
   private currentLevel: number = this.getLocalStorageCurrentLevel();
 
+  private readonly firstLevel: number = 0;
+
   public resetLevels(): void {
-    this.currentLevel = 0;
+    this.currentLevel = this.firstLevel;
     this.LEVELS_LIST = this.createLevelList();
     this.prevBtn = this.createLevelsPrevBtn();
     this.nextBtn = this.createLevelsNextBtn();
@@ -33,7 +35,7 @@ export class Levels {
   public getLocalStorageCurrentLevel(): number {
     const currentLevel: string | null = localStorage.getItem('currentLevel');
     if (currentLevel) this.currentLevel = +currentLevel;
-    else this.currentLevel = 0;
+    else this.currentLevel = this.firstLevel;
     return this.currentLevel;
   }
 
@@ -143,6 +145,17 @@ export class Levels {
     return fragment;
   }
 
+  public addBeforeUnloadListener(): void {
+    window.addEventListener('beforeunload', () => {
+      this.setLocalStorage();
+    });
+  }
+
+  public clearStore(): void {
+    localStorage.removeItem('currentLevel');
+    localStorage.removeItem('completedLevels');
+  }
+
   public pressPrevAndNextBtn(): void {
     this.nextBtn.addEventListener('click', () => {
       this.changeLevel(this.nextBtn);
@@ -191,14 +204,14 @@ export class Levels {
     this.nextOrPrevLevel();
   }
 
-  public setLocalStorage(): void {
+  private setLocalStorage(): void {
     localStorage.setItem('currentLevel', `${this.currentLevel}`);
 
     const checkmarks = document.querySelectorAll('.levels__header-checkmark');
     const comletedLevels: string[] = [];
     checkmarks.forEach((item) => comletedLevels.push(item.className));
 
-    localStorage.setItem('comletedLevels', JSON.stringify(comletedLevels));
+    localStorage.setItem('completedLevels', JSON.stringify(comletedLevels));
   }
 
   private nextOrPrevLevel(): void {
