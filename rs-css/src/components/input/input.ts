@@ -60,6 +60,8 @@ export class Input {
       target.className.includes('input__help-btn') &&
       this.inputField.value !== correctAnswer
     ) {
+      this.inputField.value = '';
+
       const appendValues = (index: number): Promise<void> =>
         new Promise((resolve) => {
           setTimeout(() => {
