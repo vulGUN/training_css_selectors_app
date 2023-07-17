@@ -3,6 +3,7 @@ import { CodeScreen } from '../code-screen/codeScreen';
 import { GAME_LEVELS } from './gameLevels';
 import { checkQuerySelector } from '../../utils/checkQuerySelector';
 import { LayoutScreen } from '../layout-screen/layoutScreen';
+import { GameLevelStore } from '../gameLevelStore';
 
 export class Levels {
   private readonly DIV_SELECTOR: string = 'div';
@@ -13,6 +14,8 @@ export class Levels {
 
   private readonly layoutScreen: LayoutScreen = new LayoutScreen();
 
+  private readonly GAME_LEVEL_STORE: GameLevelStore;
+
   private prevBtn: HTMLElement = this.createLevelsPrevBtn();
 
   private nextBtn: HTMLElement = this.createLevelsNextBtn();
@@ -21,22 +24,15 @@ export class Levels {
 
   public LEVELS_RESET: HTMLElement = this.createLevelsResetBtn();
 
-  private currentLevel: number = this.getLocalStorageCurrentLevel();
-
-  private readonly firstLevel: number = 0;
+  constructor(gameLevelStore: GameLevelStore) {
+    this.GAME_LEVEL_STORE = gameLevelStore;
+  }
 
   public resetLevels(): void {
-    this.currentLevel = this.firstLevel;
+    this.GAME_LEVEL_STORE.currentLevel = this.GAME_LEVEL_STORE.firstLevel;
     this.LEVELS_LIST = this.createLevelList();
     this.prevBtn = this.createLevelsPrevBtn();
     this.nextBtn = this.createLevelsNextBtn();
-  }
-
-  public getLocalStorageCurrentLevel(): number {
-    const currentLevel: string | null = localStorage.getItem('currentLevel');
-    if (currentLevel) this.currentLevel = +currentLevel;
-    else this.currentLevel = this.firstLevel;
-    return this.currentLevel;
   }
 
   private createLevelsResetBtn(): HTMLElement {
@@ -62,7 +58,7 @@ export class Levels {
   }
 
   public getCurrentLevel(): number {
-    return this.currentLevel;
+    return this.GAME_LEVEL_STORE.currentLevel;
   }
 
   private createLevelList(): HTMLElement {
@@ -86,7 +82,7 @@ export class Levels {
 
     const levelsText: HTMLElement = document.createElement('div');
     levelsText.classList.add('levels__header-text');
-    levelsText.textContent = `Level ${this.currentLevel + 1} of ${GAME_LEVELS.length}`;
+    levelsText.textContent = `Level ${this.GAME_LEVEL_STORE.currentLevel + 1} of ${GAME_LEVELS.length}`;
 
     const levelHeaderRightSide: HTMLElement = document.createElement('div');
     levelHeaderRightSide.classList.add('levels__right-side');
@@ -112,7 +108,7 @@ export class Levels {
 
   private generateLevelsList(): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
-    const levelsSelectors: string | null = localStorage.getItem('comletedLevels');
+    const levelsSelectors: string | null = localStorage.getItem('completedLevels');
 
     GAME_LEVELS.forEach((item, index) => {
       const levelListItem: HTMLElement = document.createElement(this.DIV_SELECTOR);
@@ -133,7 +129,7 @@ export class Levels {
       levelListItemTitle.classList.add('levels__list-item-title');
       levelListItemTitle.textContent = item.menuTitle;
 
-      if (index === this.currentLevel) {
+      if (index === this.GAME_LEVEL_STORE.currentLevel) {
         levelListItem.classList.add('current');
       }
 
@@ -143,17 +139,6 @@ export class Levels {
     });
 
     return fragment;
-  }
-
-  public addBeforeUnloadListener(): void {
-    window.addEventListener('beforeunload', () => {
-      this.setLocalStorage();
-    });
-  }
-
-  public clearStore(): void {
-    localStorage.removeItem('currentLevel');
-    localStorage.removeItem('completedLevels');
   }
 
   public pressPrevAndNextBtn(): void {
@@ -175,8 +160,8 @@ export class Levels {
           const itemList = Array.from(this.LEVELS_LIST.querySelectorAll('.levels__list-item'));
           const itemIndex = itemList.indexOf(clickedItem);
 
-          if (this.currentLevel !== itemIndex) {
-            this.currentLevel = itemIndex;
+          if (this.GAME_LEVEL_STORE.currentLevel !== itemIndex) {
+            this.GAME_LEVEL_STORE.currentLevel = itemIndex;
             this.nextOrPrevLevel();
           }
         }
@@ -188,30 +173,23 @@ export class Levels {
     const levelListItems: NodeListOf<Element> = document.querySelectorAll('.levels__list-item');
 
     levelListItems.forEach((item, index) => {
-      if (index === this.currentLevel) {
+      if (index === this.GAME_LEVEL_STORE.currentLevel) {
         item.classList.add('current');
       } else item.classList.remove('current');
     });
   }
 
   public changeLevel(button: HTMLElement): void {
-    if (button.classList.contains('levels__header-nav-next') && this.currentLevel < GAME_LEVELS.length - 1) {
-      this.currentLevel += 1;
-    } else if (button.classList.contains('levels__header-nav-prev') && this.currentLevel > 0) {
-      this.currentLevel -= 1;
+    if (
+      button.classList.contains('levels__header-nav-next') &&
+      this.GAME_LEVEL_STORE.currentLevel < GAME_LEVELS.length - 1
+    ) {
+      this.GAME_LEVEL_STORE.currentLevel += 1;
+    } else if (button.classList.contains('levels__header-nav-prev') && this.GAME_LEVEL_STORE.currentLevel > 0) {
+      this.GAME_LEVEL_STORE.currentLevel -= 1;
     }
 
     this.nextOrPrevLevel();
-  }
-
-  private setLocalStorage(): void {
-    localStorage.setItem('currentLevel', `${this.currentLevel}`);
-
-    const checkmarks = document.querySelectorAll('.levels__header-checkmark');
-    const comletedLevels: string[] = [];
-    checkmarks.forEach((item) => comletedLevels.push(item.className));
-
-    localStorage.setItem('completedLevels', JSON.stringify(comletedLevels));
   }
 
   private nextOrPrevLevel(): void {
@@ -224,15 +202,15 @@ export class Levels {
 
     codeScreenBodyText.innerHTML = '';
     layoutImageWrapper.innerHTML = '';
-    levelNumberText.innerText = `Level ${this.currentLevel + 1} of ${GAME_LEVELS.length}`;
-    title.innerText = GAME_LEVELS[this.currentLevel].title;
+    levelNumberText.innerText = `Level ${this.GAME_LEVEL_STORE.currentLevel + 1} of ${GAME_LEVELS.length}`;
+    title.innerText = GAME_LEVELS[this.GAME_LEVEL_STORE.currentLevel].title;
 
-    const newCodeScreenBodyText = this.CODE_SCREEN.generateCodeScreenBodyText(this.currentLevel);
-    const newImage = this.layoutScreen.generateImageElement(this.currentLevel);
+    const newCodeScreenBodyText = this.CODE_SCREEN.generateCodeScreenBodyText(this.GAME_LEVEL_STORE.currentLevel);
+    const newImage = this.layoutScreen.generateImageElement(this.GAME_LEVEL_STORE.currentLevel);
 
     layoutImageWrapper.appendChild(newImage);
     codeScreenBodyText.appendChild(newCodeScreenBodyText);
 
-    this.layoutScreen.addImageAnimation(this.currentLevel);
+    this.layoutScreen.addImageAnimation(this.GAME_LEVEL_STORE.currentLevel);
   }
 }
